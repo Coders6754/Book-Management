@@ -1,19 +1,23 @@
 const express = require('express')
 const { ApolloServer } = require('apollo-server-express')
-const mongoose = require('mongoose')
-const dotenv = require('dotenv');
+const mongoose = require('mongoose');
 
 
+// Load Schema and resolver
 const typeDefs = require('./schema/schema')
 const resolvers = require('./resolver/resolver')
 
-const mongooseDataMethods = require('./data/db')
+// Load DBMEthod
+const mongooseDataMethods = require('./data/db');
+
 
 // Conenct to mongoose
-const MONGO_URI = 'process.env.MONGO_URI/myFirstDatabase?retryWrites=true&w=majority';
+const MONGO_URI =
+  'mongodb+srv://anjali05:amksinha3030@cluster0.nhro7ph.mongodb.net/nomyFirstDatabase?retryWrites=true&w=majority';
+
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGO_URI, {
+    await mongoose.connect(MONGO_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     })
@@ -22,6 +26,8 @@ const connectDB = async () => {
     console.log(error.message)
     process.exit(1)
   }
+
+  console.log("server is running sucessfully");
 }
 
 connectDB()
@@ -37,6 +43,7 @@ async function startServer() {
   await apolloServer.start()
   apolloServer.applyMiddleware({ app })
 }
+
 startServer()
 
 app.listen({ port: 4000 }, () => {
